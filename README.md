@@ -13,7 +13,7 @@ Then, open the raw `*.user.js` file you want to install.
 
 | Userscripts  |   Download   |
 | ------------ | ------------ |
-| KnowYourVote | [Direct](../raw/src/knowyourvote.user.js) |
+| KnowYourVote | [Direct](../../raw/src/knowyourvote.user.js) |
 
 
 ## Acknowledgments 
