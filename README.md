@@ -11,9 +11,12 @@ First, make sure that you have a userscript addon installed.
 
 Then, open the raw `*.user.js` file you want to install.
 
+If you want updates without coming here, enable it in your -monkey settings.
+
 | Userscripts  |   Download   |
 | ------------ | ------------ |
 | KnowYourVote | [Direct](../../raw/master/src/knowyourvote.user.js) |
+| BetterEditor | [Direct](../../raw/master/src/bettereditor.user.js) |
 
 
 ## Acknowledgments 
