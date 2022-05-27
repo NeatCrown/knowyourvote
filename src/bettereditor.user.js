@@ -4,7 +4,7 @@
 // ==UserScript==
 // @name         Better Editor (KnowYourMeme)
 // @namespace    https://github.com/neatcrown/
-// @version      0.1
+// @version      0.2
 // @description  Makes improvements the the KYM Entry Editor.
 // @author       NeatCrown
 // @match        https://knowyourmeme.com/memes/*/edit
@@ -16,36 +16,46 @@
 
 //================================================================================
 //#region CSS
+
 (function() {
+
   'use strict';
 
   GM_addStyle(`
-
-    #content {
+    :root {
+      --editor-margins: 40px;
+      --dyn-width: calc(clamp(960px, 100vw, 1440px + var(--editor-margins)) - var(--editor-margins));
+      --dyn-height: calc(100vh - var(--top-offset) - var(--bot-offset) - var(--head-offset));
+      --right-offset: calc(100vw - (var(--left-offset) + var(--dyn-width)));
+    }
+    #editor_content {
       display:flex;
       flex-direction: column;
-      width: fit-content;
-
-      position : relative;
-      left: 25%;
-      transform: translateX(-25%);
+      width: var(--dyn-width);
+      height: var(--dyn-height);
+      max-width: 1440px;
+      margin-left: calc((var(--left-offset) + var(--right-offset) - var(--editor-margins)) / 2 - var(--left-offset));
     }
-    .sideBySide {
+    #editor_bodies, #editor_header {
       display:flex;
       flex-direction: row;
     }
-    #entry-preview, #previewEntry_body {
-      width:720px;
+    #editor_bodies, #markItUpEntry_body {
+      flex-grow: 1;
+      flex-shrink: 1;
+      overflow: hidden;
+    }
+    #previewEntry_body {
+      width: 720px;
+      min-width: 720px;
     }
     #entry-preview-button {
       margin-left: auto;
       line-height: 100%;
       margin-bottom: auto;
     }
-    #entry-preview {
+    #entry-preview, #entry_body, #previewEntry_body, .markItUpContainer  {
       height: 100%;
-    }
-    textarea {
       resize: none;
     }
 `);
@@ -56,10 +66,10 @@
   //#region MOVING AROUND ELEMENTS
 
   var side_by_side = $('#markItUpEntry_body').parent(1).before(
-      `<div id='content'>` +
-      `<div id='content_header' class='sideBySide'></div>` +
-      `<div id='editor_bodies' class='sideBySide iee-div'></div>` +
-      `</div>`
+    `<div id='editor_content'>` +
+      `<div id='editor_header'></div>` +
+      `<div id='editor_bodies'></div>` +
+    `</div>`
   );
 
   let editing_element = $('#markItUpEntry_body');
@@ -69,11 +79,9 @@
 
   $('#editor_bodies').append(editing_element);
   $('#editor_bodies').append(`<div id='previewEntry_body'>`);
-  $('#content_header').append(header);
-  $('#content_header').append($('#entry-preview-button'));
+  $('#editor_header').append(header);
+  $('#editor_header').append($('#entry-preview-button'));
   $('#previewEntry_body').append(preview_element);
-
-  $(`textarea`).css('width', $('#entry-preview').css('width'));
 
   //#endregion MOVING AROUND ELEMENTS
 
@@ -85,32 +93,34 @@
 
   //returns the top position of the editor
   function editorPosition() {
-      return $(".markItUpHeader").offset().top - $('.navbar').height() - TOP_OFFSET;
+    return $(".markItUpHeader").offset().top - $('.navbar').height() - TOP_OFFSET;
   }
   //dismisses the "other viewers" box
   function dismissViewers() {
-      $('#other-edit-viewers').parent().css({'position': 'relative', 'top': '0px'});
+    $('#other-edit-viewers').parent().css({'position': 'relative', 'top': '0px'});
   }
 
-  //adjusts the height of the editor so it's full visile on any vertical resolution
-  //(minimum recommended HORIZONTAL resolution is 1440 )
-  function resizeEntry() {
-      $('#entry_body').css( 'height',
-                           window.innerHeight - $('.navbar').height() - $('.markItUpHeader').outerHeight(true) - TOP_OFFSET - BOT_OFFSET);
+  //adjusts the horizontal position of the editor to center-screen
+  function repositionEntry() {
+    document.documentElement.style.setProperty('--left-offset', $('.required > .col-sm-12').offset().left + 'px');
   }
-
   //scrolls to tne editor so it's fully in view
   $('#entry-preview-button').on('click', function() {
-      $([document.documentElement, document.body]).animate({
-          scrollTop: editorPosition()
-      }, Math.abs( $(window).scrollTop() - editorPosition()));
-      dismissViewers();
+    $([document.documentElement, document.body]).animate({
+      scrollTop: editorPosition()
+    }, Math.abs( $(window).scrollTop() - editorPosition()));
+    dismissViewers();
   });
 
   //resizes the editor when the viewport is resized
-  $(window).on('resize', resizeEntry);
+  $(window).on('resize', repositionEntry);
 
-  resizeEntry();
+  //sets CSS variables
+  document.documentElement.style.setProperty('--top-offset', TOP_OFFSET + 'px');
+  document.documentElement.style.setProperty('--bot-offset', BOT_OFFSET + 'px');
+  document.documentElement.style.setProperty('--head-offset', $('.navbar').height() + 'px');
+
+  repositionEntry();
 
   //#endregion VIEWPORT SCROLLING
 })();
