@@ -4,7 +4,7 @@
 // ==UserScript==
 // @name         Better Editor (KnowYourMeme)
 // @namespace    https://github.com/neatcrown/
-// @version      0.2.1
+// @version      0.3.0
 // @description  Makes improvements the the KYM Entry Editor.
 // @author       NeatCrown
 // @match        https://knowyourmeme.com/memes/*/edit
@@ -29,6 +29,11 @@
             --dyn-height: calc(100vh - var(--top-offset) - var(--bot-offset) - var(--head-offset));
             --right-offset: calc(100vw - (var(--left-offset) + var(--dyn-width)));
         }
+        #entry-preview-button {
+            margin-left: auto;
+            line-height: 100%;
+            margin-bottom: auto;
+        }
         #editor_content {
             display:flex;
             flex-direction: column;
@@ -44,20 +49,17 @@
         #editor_bodies, #markItUpEntry_body {
             flex-grow: 1;
             flex-shrink: 1;
-            overflow: hidden;
         }
-        #previewEntry_body {
-            width: 720px;
-            min-width: 720px;
+        #entry_body, .markItUpContainer  {
+            height: 100%;
         }
-        #entry-preview-button {
-            margin-left: auto;
-            line-height: 100%;
-            margin-bottom: auto;
-        }
-        #entry-preview, #entry_body, #previewEntry_body, .markItUpContainer  {
+        #entry-preview {
             height: 100%;
             resize: none;
+            padding: 0 8px;
+        }
+        #previewEntry_body, #entry-preview {
+            width: 760px;
         }
     `);
 
