@@ -4,7 +4,7 @@
 // ==UserScript==
 // @name         Better Editor (KnowYourMeme)
 // @namespace    https://github.com/neatcrown/
-// @version      0.3.0
+// @version      0.3.1
 // @description  Makes improvements the the KYM Entry Editor.
 // @author       NeatCrown
 // @match        https://knowyourmeme.com/memes/*/edit
@@ -49,17 +49,17 @@
         #editor_bodies, #markItUpEntry_body {
             flex-grow: 1;
             flex-shrink: 1;
+            overflow: hidden;
         }
-        #entry_body, .markItUpContainer  {
-            height: 100%;
-        }
-        #entry-preview {
+        #entry-preview, #entry_body, #previewEntry_body, .markItUpContainer  {
             height: 100%;
             resize: none;
-            padding: 0 8px;
         }
         #previewEntry_body, #entry-preview {
             width: 760px;
+        }
+        #entry-preview {
+            padding: 0 8px;
         }
     `);
 
